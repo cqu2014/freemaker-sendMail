@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    include: config
+  mail:
+    port: 25
+    host: ${freemarker.host}
+    username: ${freemarker.username}
+    password: ${freemarker.password}
+    protocol: smtp
+    default-encoding: utf-8
