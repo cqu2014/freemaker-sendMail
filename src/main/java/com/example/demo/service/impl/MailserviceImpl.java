@@ -1,6 +1,10 @@
 package com.example.demo.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.example.demo.model.EmailTemplate;
 import com.example.demo.model.MailParameterRequest;
+import com.example.demo.service.IMailTemplateService;
 import com.example.demo.service.MailService;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
@@ -25,6 +29,7 @@ import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,7 +48,11 @@ public class MailserviceImpl implements MailService {
 
     //发送邮件的模板引擎
     @Autowired
-    private static FreeMarkerConfigurer configurer;
+    private FreeMarkerConfigurer configurer;
+
+    //从数据库查找邮件模板
+    @Autowired
+    IMailTemplateService iMailTemplateService;
 
 
     public void sendMessageMail1(MailParameterRequest mailParameterRequest) {
@@ -101,53 +110,11 @@ public class MailserviceImpl implements MailService {
 
     @Override
     public  void sendMessageMail(MailParameterRequest mailParameterRequest){
-        String templateString="<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <title>消息通知</title>\n" +
-                "</head>\n" +
-                "\n" +
-                "<style type=\"text/css\">\n" +
-                "    table {\n" +
-                "        font-family: \"Trebuchet MS\", Arial, Helvetica, sans-serif;\n" +
-                "        width: 100%;\n" +
-                "        border-collapse: collapse;\n" +
-                "    }\n" +
-                "\n" +
-                "    td, th {\n" +
-                "        font-size: 1em;\n" +
-                "        border: 1px solid #5B4A42;\n" +
-                "        padding: 3px 7px 2px 7px;\n" +
-                "    }\n" +
-                "\n" +
-                "    th {\n" +
-                "        font-size: 1.1em;\n" +
-                "        text-align: center;\n" +
-                "        padding-top: 5px;\n" +
-                "        padding-bottom: 4px;\n" +
-                "        background-color: #24A9E1;\n" +
-                "        color: #ffffff;\n" +
-                "    }\n" +
-                "</style>\n" +
-                "<body>\n" +
-                "<div>\n" +
-                "    <h2>邮件消息通知</h2>\n" +
-                "    <table id=\"customers\">\n" +
-                "        <tr>\n" +
-                "            <th>MessageCode</th>\n" +
-                "            <th>MessageStatus</th>\n" +
-                "            <th>Cause</th>\n" +
-                "        </tr>\n" +
-                "        <tr>\n" +
-                "            <td>${(params.messageCode)!\"\"}</td>\n" +
-                "            <td>${(params.messageStatus)!\"\"}</td>\n" +
-                "            <td>${(params.cause)!\"\"}</td>\n" +
-                "        </tr>\n" +
-                "    </table>\n" +
-                "</div>\n" +
-                "</body>\n" +
-                "</html>";
+        String emailTemplateListString = iMailTemplateService.queryById(35).getEmailTemplateList();
+
+        List<EmailTemplate> emailTemplateList = JSONArray.parseArray(emailTemplateListString,EmailTemplate.class);
+
+        String templateString = emailTemplateList.get(0).getContent().getEmailTemplateContent();
 
         StringWriter writer = new StringWriter();
         Map<String, Object> map=new HashMap<>();
@@ -156,7 +123,6 @@ public class MailserviceImpl implements MailService {
         try {
             template = new Template("template-name", new StringReader(templateString), new Configuration(new Version("2.3.23")));
             template.process(map, writer);
-            System.out.println(writer.toString());
 
             //mimeMessage类型
             MimeMessage mimeMessage = mailSender.createMimeMessage();

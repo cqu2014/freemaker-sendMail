@@ -8,3 +8,8 @@ spring:
     password: ${freemarker.password}
     protocol: smtp
     default-encoding: utf-8
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
