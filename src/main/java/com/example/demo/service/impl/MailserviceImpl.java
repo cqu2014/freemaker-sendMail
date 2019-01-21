@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.example.demo.model.EmailTemplate;
 import com.example.demo.model.MailParameterRequest;
@@ -11,6 +10,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.Version;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,7 +20,6 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -37,6 +36,7 @@ import java.util.Map;
  */
 
 @Service
+@Slf4j
 public class MailserviceImpl implements MailService {
     //邮件的发送者
     @Value("${spring.mail.username}")
@@ -55,15 +55,17 @@ public class MailserviceImpl implements MailService {
     IMailTemplateService iMailTemplateService;
 
 
-    public void sendMessageMail1(MailParameterRequest mailParameterRequest) {
+    public void sendMessageWithStringTemplate(MailParameterRequest mailParameterRequest) {
         try {
             //mimeMessage类型
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             //设置富文本类型
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
             helper.setFrom(from);//发送者
-            helper.setTo(InternetAddress.parse("oliver.wang@shein.com"));//发送给谁
-            helper.setSubject("[" + mailParameterRequest.getTitle() + "-" + LocalDate.now() + " " + LocalTime.now().withNano(0) + "]");//邮件标题
+            //发送给谁
+            helper.setTo(InternetAddress.parse("oliver.wang@shein.com"));
+            //邮件标题
+            helper.setSubject("[" + mailParameterRequest.getTitle() + "-" + LocalDate.now() + " " + LocalTime.now().withNano(0) + "]");
 
             Map<String, Object> model = new HashMap<>();
             model.put("params", mailParameterRequest.getMessage());
@@ -85,7 +87,10 @@ public class MailserviceImpl implements MailService {
         }
     }
 
-    public static void sendFromString() {
+    /**
+     *  字符串模板测试发送邮件
+     */
+    private void sendFromString() {
         StringWriter writer = new StringWriter();
         String content = "你的名字是： ${name !\"\"}";
 
@@ -110,6 +115,7 @@ public class MailserviceImpl implements MailService {
 
     @Override
     public  void sendMessageMail(MailParameterRequest mailParameterRequest){
+        //从数据库里获取字符串类型模板
         String emailTemplateListString = iMailTemplateService.queryById(35).getEmailTemplateList();
 
         List<EmailTemplate> emailTemplateList = JSONArray.parseArray(emailTemplateListString,EmailTemplate.class);
@@ -119,9 +125,11 @@ public class MailserviceImpl implements MailService {
         StringWriter writer = new StringWriter();
         Map<String, Object> map=new HashMap<>();
         map.put("params", mailParameterRequest.getMessage());
-        Template template = null;
+        Template template;
         try {
+            //利用StringReader生成模板
             template = new Template("template-name", new StringReader(templateString), new Configuration(new Version("2.3.23")));
+            //替换dataModel并写入StringWriter
             template.process(map, writer);
 
             //mimeMessage类型
@@ -129,13 +137,13 @@ public class MailserviceImpl implements MailService {
             //设置富文本类型
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
             helper.setFrom(from);//发送者
-            helper.setTo(InternetAddress.parse("oliver.wang@shein.com"));//发送给谁
-            helper.setSubject("[" + mailParameterRequest.getTitle() + "-" + LocalDate.now() + " " + LocalTime.now().withNano(0) + "]");//邮件标题
+            helper.setTo(InternetAddress.parse("286931986@qq.com"));//发送给谁
+            helper.setSubject("[Oliver has a test]");//邮件标题
             helper.setText(writer.toString(), true);
 
             mailSender.send(mimeMessage);
         } catch (MessagingException | IOException | TemplateException e) {
-            e.printStackTrace();
+            log.error("sendMessageMail:exception",e);
         }
     }
 }

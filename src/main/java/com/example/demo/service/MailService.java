@@ -13,5 +13,11 @@ public interface MailService {
      */
     void sendMessageMail(MailParameterRequest mailParameterRequest);
 
-    //void SendFromString(MailParameterRequest mailParameterRequest) throws IOException;
+    /**
+     * 使用字符串模板发送邮件
+     *
+     * @param mailParameterRequest
+     */
+    void sendMessageWithStringTemplate(MailParameterRequest mailParameterRequest);
+
 }
