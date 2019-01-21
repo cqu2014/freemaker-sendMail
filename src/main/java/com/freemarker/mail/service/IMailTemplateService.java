@@ -1,6 +1,6 @@
-package com.example.demo.service;
+package com.freemarker.mail.service;
 
-import com.example.demo.entity.PO.SystemEmailPo;
+import com.freemarker.mail.entity.PO.SystemEmailPo;
 
 /**
  * @Author Oliver Wang

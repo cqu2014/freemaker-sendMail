@@ -1,6 +1,6 @@
-package com.example.demo.service;
+package com.freemarker.mail.service;
 
-import com.example.demo.model.MailParameterRequest;
+import com.freemarker.mail.model.MailParameterRequest;
 
 /**
  * Created by Administrator on 2017/12/13.

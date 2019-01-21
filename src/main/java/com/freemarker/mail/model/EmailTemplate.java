@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.freemarker.mail.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;

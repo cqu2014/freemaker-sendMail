@@ -1,8 +1,8 @@
-package com.example.demo.controller;
+package com.freemarker.mail.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo.model.MailParameterRequest;
-import com.example.demo.service.MailService;
+import com.freemarker.mail.model.MailParameterRequest;
+import com.freemarker.mail.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.freemarker.mail;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

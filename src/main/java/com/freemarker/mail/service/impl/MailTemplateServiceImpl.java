@@ -1,9 +1,9 @@
-package com.example.demo.service.impl;
+package com.freemarker.mail.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo.entity.PO.SystemEmailPo;
-import com.example.demo.mapper.SystemEmailPoMapper;
-import com.example.demo.service.IMailTemplateService;
+import com.freemarker.mail.entity.PO.SystemEmailPo;
+import com.freemarker.mail.mapper.SystemEmailPoMapper;
+import com.freemarker.mail.service.IMailTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

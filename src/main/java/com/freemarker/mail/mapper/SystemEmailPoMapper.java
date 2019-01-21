@@ -1,6 +1,6 @@
-package com.example.demo.mapper;
+package com.freemarker.mail.mapper;
 
-import com.example.demo.entity.PO.SystemEmailPo;
+import com.freemarker.mail.entity.PO.SystemEmailPo;
 import org.springframework.stereotype.Repository;
 
 @Repository

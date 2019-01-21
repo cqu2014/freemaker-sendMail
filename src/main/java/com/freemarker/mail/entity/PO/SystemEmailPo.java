@@ -1,4 +1,4 @@
-package com.example.demo.entity.PO;
+package com.freemarker.mail.entity.PO;
 
 import java.util.Date;
 

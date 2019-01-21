@@ -1,10 +1,10 @@
-package com.example.demo.service.impl;
+package com.freemarker.mail.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
-import com.example.demo.model.EmailTemplate;
-import com.example.demo.model.MailParameterRequest;
-import com.example.demo.service.IMailTemplateService;
-import com.example.demo.service.MailService;
+import com.freemarker.mail.model.EmailTemplate;
+import com.freemarker.mail.model.MailParameterRequest;
+import com.freemarker.mail.service.IMailTemplateService;
+import com.freemarker.mail.service.MailService;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
